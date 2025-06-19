@@ -1,0 +1,34 @@
+/* === [INIZIO HEADER] === */
+header {
+  /* Personalizzazioni header se necessarie */
+}
+/* === [FINE HEADER] === */
+
+/* === [INIZIO CARD KANBAN] === */
+.card-lavoro {
+  transition: box-shadow 0.2s;
+  box-shadow: 0 2px 8px #bbb4;
+  border-radius: 1.25rem;
+  background: #fff;
+}
+/* === [FINE CARD KANBAN] === */
+
+/* === [INIZIO INPUT MODALE] === */
+.input-kanban {
+  border: 1px solid #c7e0ed;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  margin-top: 0.25rem;
+  width: 100%;
+}
+/* === [FINE INPUT MODALE] === */
+
+/* === [INIZIO DRAG&DROP EFFECT] === */
+.dragging {
+  opacity: 0.5;
+  border: 2px dashed #0e7490;
+}
+.kanban-column.dragover {
+  background: #e0f2fe;
+}
+/* === [FINE DRAG&DROP EFFECT] === */
