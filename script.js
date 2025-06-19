@@ -1,18 +1,37 @@
-// === [INIZIO DATI E VARIABILI GLOBALI] ===
+// === [INIZIO DATI E VARIABILI GLOBALI v3 STORAGE 2024-06-19] ===
 const stati = [
   { id: "da-fare", nome: "Da Fare", colore: "cyan-700" },
   { id: "in-lavorazione", nome: "In Lavorazione", colore: "cyan-400" },
   { id: "in-attesa", nome: "In Attesa", colore: "yellow-400" },
   { id: "completato", nome: "Completato", colore: "green-400" },
 ];
-let lavori = [
-  { id: 1, azienda: "Azienda Nicola", tipo: "DVR", collaboratore: "Mario Rossi", note: "Urgente", stato: "da-fare", timer: 0, running: false },
-  { id: 2, azienda: "Sanitas S.p.A.", tipo: "Relazione Chimica", collaboratore: "Giulia Bianchi", note: "", stato: "da-fare", timer: 0, running: false },
-  { id: 3, azienda: "Ecoltalia", tipo: "Autorizzazione Unica Ambientale", collaboratore: "Luca Moretti", note: "", stato: "in-lavorazione", timer: 0, running: false },
-];
+// Nessuna card di esempio: partiamo con array vuoto!
+let lavori = [];
 // Timer multipli per ogni lavoro
 let timerIntervals = {};
-// === [FINE DATI E VARIABILI GLOBALI] ===
+// === [FINE DATI E VARIABILI GLOBALI v3 STORAGE 2024-06-19] ===
+
+// === [INIZIO BLOCCO SALVA/CARICA LAVORI LOCALSTORAGE v3 STORAGE 2024-06-19] ===
+const STORAGE_KEY = "atis-kanban-lavori";
+
+// Carica lavori da localStorage (se ci sono)
+function caricaLavori() {
+  const dati = localStorage.getItem(STORAGE_KEY);
+  if (dati) {
+    try {
+      lavori = JSON.parse(dati);
+    } catch (e) {
+      lavori = [];
+    }
+  }
+}
+
+// Salva lavori su localStorage
+function salvaLavori() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lavori));
+}
+// === [FINE BLOCCO SALVA/CARICA LAVORI LOCALSTORAGE v3 STORAGE 2024-06-19] ===
+
 
 
 // === [INIZIO RENDER BOARD KANBAN] ===
@@ -80,14 +99,16 @@ function renderCards() {
 }
 // === [FINE RENDER CARDS] ===
 
-// === [INIZIO FUNZIONE ELIMINA LAVORO] ===
+// === [INIZIO FUNZIONE ELIMINA LAVORO v3 STORAGE 2024-06-19] ===
 window.eliminaLavoro = function(id) {
   if(confirm("Sei sicuro di voler eliminare questo lavoro?")) {
     lavori = lavori.filter(lav => lav.id !== id);
+    salvaLavori();      // <--- AGGIUNTA QUI
     renderBoard();
   }
 }
-// === [FINE FUNZIONE ELIMINA LAVORO] ===
+// === [FINE FUNZIONE ELIMINA LAVORO v3 STORAGE 2024-06-19] ===
+
 
 
 
@@ -137,17 +158,21 @@ function dragOverHandler(e) {
   e.preventDefault();
   this.classList.add('dragover');
 }
+// === [INIZIO BLOCCO JS dropHandler v3 STORAGE 2024-06-19] ===
 function dropHandler(e) {
   e.preventDefault();
   this.classList.remove('dragover');
   if (draggedCardId) {
     let lav = lavori.find(l => l.id == draggedCardId);
     lav.stato = this.dataset.stato;
+    salvaLavori();      // <--- AGGIUNTA QUI
     renderBoard();
     draggedCardId = null;
   }
 }
-// === [FINE FUNZIONI DRAG&DROP] ===
+// === [FINE BLOCCO JS dropHandler v3 STORAGE 2024-06-19] ===
+
+
 
 
 // === [INIZIO MODALE NUOVO/MODIFICA LAVORO] ===
@@ -176,6 +201,7 @@ window.openModale = function(id=null) {
 window.closeModale = function() {
   document.getElementById('modale-lavoro').classList.add('hidden');
 };
+// === [INIZIO BLOCCO JS onsubmit form-lavoro v3 STORAGE 2024-06-19] ===
 document.getElementById('form-lavoro').onsubmit = function(e) {
   e.preventDefault();
   const id = document.getElementById('lavoro-id').value;
@@ -200,11 +226,14 @@ document.getElementById('form-lavoro').onsubmit = function(e) {
     lavori.push(nuovo);
   }
   closeModale();
+  salvaLavori();     // <--- AGGIUNTA QUI
   renderBoard();
 };
-// === [FINE MODALE NUOVO/MODIFICA LAVORO] ===
+// === [FINE BLOCCO JS onsubmit form-lavoro v3 STORAGE 2024-06-19] ===
 
 
-// === [INIZIO AVVIO INIZIALE] ===
+
+// === [INIZIO BLOCCO AVVIO INIZIALE v3 STORAGE 2024-06-19] ===
+caricaLavori();
 renderBoard();
-// === [FINE AVVIO INIZIALE] ===
+// === [FINE BLOCCO AVVIO INIZIALE v3 STORAGE 2024-06-19] ===
