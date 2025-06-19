@@ -61,23 +61,34 @@ function renderCards() {
         <div class="flex items-center gap-2 mt-2 mb-2">
           <span class="text-gray-700 text-xs font-semibold">${lav.collaboratore}</span>
         </div>
-        <div class="flex gap-2 items-center">
+        <div class="flex gap-2 items-center mb-2">
           <span class="text-cyan-700 font-mono text-base" id="timer-${lav.id}">${formatTimer(lav.timer)}</span>
           <button onclick="startTimer(${lav.id})" class="bg-cyan-600 text-white px-2 py-1 rounded-lg font-bold">Inizia</button>
           <button onclick="pauseTimer(${lav.id})" class="bg-yellow-400 text-white px-2 py-1 rounded-lg font-bold">Pausa</button>
           <button onclick="stopTimer(${lav.id})" class="bg-green-600 text-white px-2 py-1 rounded-lg font-bold">Stop</button>
           <button onclick="openModale(${lav.id})" class="bg-gray-200 text-cyan-700 px-2 py-1 rounded-lg font-bold">✏️</button>
         </div>
+        <div class="flex justify-end">
+          <button onclick="eliminaLavoro(${lav.id})" title="Elimina" class="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded font-bold text-xs">Elimina</button>
+        </div>
       `;
-      // === [INIZIO EVENTI DRAG&DROP CARD] ===
       card.addEventListener('dragstart', dragStartHandler);
       card.addEventListener('dragend', dragEndHandler);
-      // === [FINE EVENTI DRAG&DROP CARD] ===
       cardBox.appendChild(card);
     });
   });
 }
 // === [FINE RENDER CARDS] ===
+
+// === [INIZIO FUNZIONE ELIMINA LAVORO] ===
+window.eliminaLavoro = function(id) {
+  if(confirm("Sei sicuro di voler eliminare questo lavoro?")) {
+    lavori = lavori.filter(lav => lav.id !== id);
+    renderBoard();
+  }
+}
+// === [FINE FUNZIONE ELIMINA LAVORO] ===
+
 
 
 // === [INIZIO FUNZIONI TIMER] ===
